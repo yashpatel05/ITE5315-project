@@ -1,17 +1,17 @@
-var express  = require('express');
+var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose');
-var app      = express();
+var app = express();
 var exphbs = require('express-handlebars');
 var database = require('./config/database');
 var bodyParser = require('body-parser');         // pull information from HTML POST (express4)
- 
-var port     = process.env.PORT || 8000;
+
+var port = process.env.PORT || 8000;
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ 'extended': 'true' }));            // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());                                     // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 
@@ -20,14 +20,20 @@ mongoose.connect(database.url);
 var Car = require('./models/car');
 
 // Set the view engine to use Handlebars
-app.engine('.hbs', exphbs.engine({ 
+app.engine('.hbs', exphbs.engine({
     extname: '.hbs',
     defaultLayout: 'main',
-    helpers:{ 
-        
-      } 
+    helpers: {
+
+    }
 }));
 app.set('view engine', 'hbs');
+
+// Define a route for the root URL ('/')
+app.get('/', function (req, res) {
+    // Render the 'index' view, passing in a title
+    res.render('index', { title: 'Express' });
+});
 
 // Show all invoice-info
 app.get('/api/cars', function (req, res) {
@@ -39,7 +45,7 @@ app.get('/api/cars', function (req, res) {
         const parsedCars = cars.map(car => car.toObject());
 
         // Render the 'allData' view and pass the parsed JSON data to it
-        res.render('allData', { salesData: parsedCars, title: 'All Sales Info' });  
+        res.render('allData', { salesData: parsedCars, title: 'All Sales Info' });
     });
 });
 
@@ -126,35 +132,35 @@ app.put('/api/cars/:car_id', function (req, res) {
 
 // Define a route to display the search form for Manufacturer
 app.get('/search/manufacturer', (req, res) => {
-  res.render('search_manufacturer', { title: 'Search for Manufacturer' });
+    res.render('search_manufacturer', { title: 'Search for Manufacturer' });
 });
 
 // Handle the form submission for Manufacturer search
 app.post('/search/manufacturerResult', async (req, res) => {
-  try {
-    const searchManufacturer = req.body.manufacturer.toLowerCase();
+    try {
+        const searchManufacturer = req.body.manufacturer.toLowerCase();
 
-    // Use Mongoose to find documents that match the search criteria
-    const results = await Car.find({
-      Manufacturer: { $regex: new RegExp(searchManufacturer, 'i') }, // Case-insensitive search
-    });
+        // Use Mongoose to find documents that match the search criteria
+        const results = await Car.find({
+            Manufacturer: { $regex: new RegExp(searchManufacturer, 'i') }, // Case-insensitive search
+        });
 
-    if (results.length > 0) {
-      res.render('search_manufacturer_result', {
-        title: 'Search Manufacturer Results',
-        searchManufacturer: searchManufacturer,
-        results: results.map(result => result.toObject()), // Convert Mongoose documents to plain JavaScript objects
-      });
-    } else {
-      res.render('error', {
-        title: 'Error',
-        message: `No sales records found for "${searchManufacturer}" Manufacturer.`,
-      });
+        if (results.length > 0) {
+            res.render('search_manufacturer_result', {
+                title: 'Search Manufacturer Results',
+                searchManufacturer: searchManufacturer,
+                results: results.map(result => result.toObject()), // Convert Mongoose documents to plain JavaScript objects
+            });
+        } else {
+            res.render('error', {
+                title: 'Error',
+                message: `No sales records found for "${searchManufacturer}" Manufacturer.`,
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
 });
 
 app.listen(port);
