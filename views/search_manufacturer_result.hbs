@@ -1,0 +1,45 @@
+<h1>Search results for "{{searchManufacturer}}"</h1>
+<table>
+    <tr>
+        <th>InvoiceNo</th>
+        <th>Image</th>
+        <th>Manufacturer</th>
+        <th>Class</th>
+        <th>Sales in thousands</th>
+        <th>Year Resale Value</th>
+        <th>Vehicle Type</th>
+        <th>Price in thousands</th>
+        <th>Engine Size</th>
+        <th>Horsepower</th>
+        <th>Wheelbase</th>
+        <th>Width</th>
+        <th>Length</th>
+        <th>Curb Weight</th>
+        <th>Fuel Capacity</th>
+        <th>Fuel Efficiency</th>
+        <th>Latest Launch</th>
+        <th>Power Performance Factor</th>
+    </tr>
+    {{#each results}}
+    <tr>
+        <td>{{InvoiceNo}}</td>
+        <td><img src="{{image}}" alt="Image not found"></td>
+        <td>{{Manufacturer}}</td>
+        <td>{{class}}</td>
+        <td>{{Sales_in_thousands}}</td>
+        <td>{{__year_resale_value}}</td>
+        <td>{{Vehicle_type}}</td>
+        <td>{{Price_in_thousands}}</td>
+        <td>{{Engine_size}}</td>
+        <td>{{Horsepower}}</td>
+        <td>{{Wheelbase}}</td>
+        <td>{{Width}}</td>
+        <td>{{Length}}</td>
+        <td>{{Curb_weight}}</td>
+        <td>{{Fuel_capacity}}</td>
+        <td>{{Fuel_efficiency}}</td>
+        <td>{{Latest_Launch}}</td>
+        <td>{{Power_perf_factor}}</td>
+    </tr>
+    {{/each}}
+</table>
