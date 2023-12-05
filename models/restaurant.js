@@ -12,32 +12,24 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const GradeSchema = new Schema({
-    date: Date,
-    grade: String,
-    score: Number,
-});
-
-const CoordSchema = new Schema({
-    0: Number, // longitude
-    1: Number, // latitude
-});
-
-const AddressSchema = new Schema({
-    building: String,
-    coord: [CoordSchema],
-    street: String,
-    zipcode: String,
+var RestaurantSchema = new Schema({
+    address: {
+        building: String,
+        coord: [Number],
+        street: String,
+        zipcode: String
+    },
     borough: String,
-});
-
-const RestaurantSchema = new Schema({
-    _id: Schema.Types.ObjectId,
-    address: AddressSchema,
     cuisine: String,
-    grades: [GradeSchema],
+    grades: [
+        {
+            date: Date,
+            grade: String,
+            score: Number
+        }
+    ],
     name: String,
-    restaurant_id: String,
+    restaurant_id: String
 });
 
 module.exports = mongoose.model('Restaurant', RestaurantSchema, 'restaurants');
