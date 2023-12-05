@@ -1,20 +1,20 @@
 {
-  "name": "asn4-mongo-yash",
+  "name": "express",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "## Description",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Yash Patel",
+  "author": "",
   "license": "ISC",
-  "keywords": [],
-  "description": "",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
-    "express-validator": "^6.15.0",
-    "mongoose": "^6.12.3"
-  }
+    "i": "^0.3.7",
+    "mongoose": "^8.0.2"
+  },
+  "keywords": []
 }

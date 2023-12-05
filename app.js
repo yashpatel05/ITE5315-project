@@ -1,167 +1,90 @@
-var express = require('express');
-var path = require('path');
-var mongoose = require('mongoose');
-var app = express();
-var exphbs = require('express-handlebars');
-var database = require('./config/database');
-var bodyParser = require('body-parser');         // pull information from HTML POST (express4)
+/****************************************************************************** 
+ * ITE5315 – Project 
+ * I declare that this assignment is my own work in accordance with Humber Academic Policy. 
+ * No part of this assignment has been copied manually or electronically from any other source 
+ * (including web sites) or distributed to other students. 
+ * 
+ * Group member Name: Yash Patel     Student IDs: N01537676    Date: 04/12/23
+ *                    Aditya Joshi                N01545536
+ ******************************************************************************/
 
-var port = process.env.PORT || 8000;
+const express = require('express');
+const cors = require('cors');
+const db = require('./db');
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+const app = express();                                         // Express app setup
 
-app.use(bodyParser.urlencoded({ 'extended': 'true' }));            // parse application/x-www-form-urlencoded
+const bodyParser = require('body-parser');                     // pull information from HTML POST (express4)
+
+// Define the port for the server
+const PORT = process.env.PORT || 8000;
+
+app.use(cors());                                                // Enable CORS for all routes                  
+app.use(bodyParser.urlencoded({ 'extended': 'true' }));         // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());                                     // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 
-mongoose.connect(database.url);
-
-var Car = require('./models/car');
-
-// Set the view engine to use Handlebars
-app.engine('.hbs', exphbs.engine({
-    extname: '.hbs',
-    defaultLayout: 'main',
-    helpers: {
-
-    }
-}));
-app.set('view engine', 'hbs');
-
-// Define a route for the root URL ('/')
-app.get('/', function (req, res) {
-    // Render the 'index' view, passing in a title
-    res.render('index', { title: 'Express' });
-});
-
-// Show all invoice-info
-app.get('/api/cars', function (req, res) {
-    Car.find(function (err, cars) {
-        if (err)
-            res.send(err)
-
-        // Convert Mongoose documents to plain JavaScript objects
-        const parsedCars = cars.map(car => car.toObject());
-
-        // Render the 'allData' view and pass the parsed JSON data to it
-        res.render('allData', { salesData: parsedCars, title: 'All Sales Info' });
+// Initialize MongoDB connection
+db.initialize()
+  .then(() => {
+    // Start the server after successfully connecting to MongoDB
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
     });
+  })
+  .catch((err) => {
+    console.error(`Failed to connect to MongoDB: ${err}`);
+  });
+
+// Routes
+
+// POST route to add a new restaurant
+app.post('/api/restaurants', async (req, res) => {
+  try {
+    const result = await db.addNewRestaurant(req.body); // Add a new restaurant based on the request body
+    res.status(201).json(result); // Return the newly created restaurant with status code 201 (Created)
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Return an error message with status code 500 (Internal Server Error)
+  }
 });
 
-// Show a specific invoice (based on the _id or invoiceID)
-app.get('/api/cars/:car_id', function (req, res) {
-    let id = req.params.car_id;
-    Car.findById(id, function (err, car) {
-        if (err)
-            res.send(err)
-        res.json(car);
-    });
+// GET route to retrieve a paginated list of restaurants with optional borough filter
+app.get('/api/restaurants', async (req, res) => {
+  try {
+    const { page, perPage, borough } = req.query;
+    const result = await db.getAllRestaurants(Number(page), Number(perPage), borough);
+    res.json(result); // Return the list of restaurants as JSON
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Return an error message with status code 500 (Internal Server Error)
+  }
 });
 
-// Show form to insert a new invoice
-app.get('/addData', function (req, res) {
-    res.render('addData', { title: 'Add New Data' });
+// GET route to retrieve a specific restaurant by ID
+app.get('/api/restaurants/:id', async (req, res) => {
+  try {
+    const result = await db.getRestaurantById(req.params.id);
+    res.json(result); // Return the specific restaurant as JSON
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Return an error message with status code 500 (Internal Server Error)
+  }
 });
 
-// Insert a new invoice
-app.post('/api/cars', function (req, res) {
-    Car.create({
-        InvoiceNo: req.body.InvoiceNo,
-        image: req.body.image,
-        Manufacturer: req.body.Manufacturer,
-        class: req.body.class,
-        Sales_in_thousands: req.body.Sales_in_thousands,
-        __year_resale_value: req.body.__year_resale_value,
-        Vehicle_type: req.body.Vehicle_type,
-        Price_in_thousands: req.body.Price_in_thousands,
-        Engine_size: req.body.Engine_size,
-        Horsepower: req.body.Horsepower,
-        Wheelbase: req.body.Wheelbase,
-        Width: req.body.Width,
-        Length: req.body.Length,
-        Curb_weight: req.body.Curb_weight,
-        Fuel_capacity: req.body.Fuel_capacity,
-        Fuel_efficiency: req.body.Fuel_efficiency,
-        Latest_Launch: req.body.Latest_Launch,
-        Power_perf_factor: req.body.Power_perf_factor
-    }, function (err, car) {
-        if (err)
-            res.send(err);
-        Car.find(function (err, cars) {
-            if (err)
-                res.send(err)
-
-            // Convert Mongoose documents to plain JavaScript objects
-            const parsedCars = cars.map(car => car.toObject());
-
-            // Render the 'allData' view and pass the parsed JSON data to it
-            res.render('allData', { salesData: parsedCars, title: 'All Sales Info' });
-        });
-    });
+// PUT route to update a specific restaurant by ID
+app.put('/api/restaurants/:id', async (req, res) => {
+  try {
+    const result = await db.updateRestaurantById(req.body, req.params.id);
+    res.json(result); // Return the updated restaurant as JSON
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Return an error message with status code 500 (Internal Server Error)
+  }
 });
 
-// Delete an existing invoice (based on the _id or invoiceID)
-app.delete('/api/cars/:car_id', function (req, res) {
-    let id = req.params.car_id;
-    Car.remove({
-        _id: id
-    }, function (err) {
-        if (err)
-            res.send(err);
-        else
-            res.send('Successfully! CarSales record deleted.');
-    });
+// DELETE route to delete a specific restaurant by ID
+app.delete('/api/restaurants/:id', async (req, res) => {
+  try {
+    const result = await db.deleteRestaurantById(req.params.id);
+    res.json({ message: 'Restaurant deleted successfully' }); // Return a success message as JSON
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Return an error message with status code 500 (Internal Server Error)
+  }
 });
-
-// Update "Manufacturer" & “price_in_thousands” of an existing invoice (based on the _id or invoiceID)
-app.put('/api/cars/:car_id', function (req, res) {
-    let id = req.params.car_id;
-    var data = {
-        Manufacturer: req.body.Manufacturer,
-        Price_in_thousands: req.body.Price_in_thousands,
-    }
-
-    Car.findByIdAndUpdate(id, data, function (err, car) {
-        if (err) throw err;
-        res.send('Successfully! CarSales record updated.');
-    });
-});
-
-// Added new functionality
-
-// Define a route to display the search form for Manufacturer
-app.get('/search/manufacturer', (req, res) => {
-    res.render('search_manufacturer', { title: 'Search for Manufacturer' });
-});
-
-// Handle the form submission for Manufacturer search
-app.post('/search/manufacturerResult', async (req, res) => {
-    try {
-        const searchManufacturer = req.body.manufacturer.toLowerCase();
-
-        // Use Mongoose to find documents that match the search criteria
-        const results = await Car.find({
-            Manufacturer: { $regex: new RegExp(searchManufacturer, 'i') }, // Case-insensitive search
-        });
-
-        if (results.length > 0) {
-            res.render('search_manufacturer_result', {
-                title: 'Search Manufacturer Results',
-                searchManufacturer: searchManufacturer,
-                results: results.map(result => result.toObject()), // Convert Mongoose documents to plain JavaScript objects
-            });
-        } else {
-            res.render('error', {
-                title: 'Error',
-                message: `No sales records found for "${searchManufacturer}" Manufacturer.`,
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-app.listen(port);
-console.log("App listening on port : " + port);
