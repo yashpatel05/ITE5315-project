@@ -8,7 +8,6 @@
  *                    Aditya Joshi                N01545536
  ******************************************************************************/
 
-const { query, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const Restaurant = require('./models/restaurant');
 const database = require('./config/database');
@@ -46,42 +45,22 @@ module.exports = {
     },
 
     // Function to get a paginated list of restaurants with optional borough filter
-    getAllRestaurants: [
-        // Validate query parameters using express-validator
-        query('page').isInt().toInt(),
-        query('perPage').isInt().toInt(),
-        query('borough').optional().isString(),
-
-        async (req, res) => {
-            // Check for validation errors
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                // Return a 400 response if validation fails
-                return res.status(400).json({ errors: errors.array() });
-            }
-
-            try {
-                // Destructure validated query parameters
-                const { page, perPage, borough } = req.query;
-
-                // Construct a query based on the optional borough filter
-                const query = borough ? { 'address.borough': borough } : {};
-
-                // Retrieve a paginated list of restaurants based on the query
-                const result = await Restaurant.find(query)
-                    .sort({ 'restaurant_id': 1 })
-                    .skip((page - 1) * perPage)
-                    .limit(perPage);
-
-                // Return the result
-                res.json(result);
-            } catch (error) {
-                // Log and return a 500 response if getting all restaurants fails
-                console.error(`Error getting all restaurants by page, perPage, and borough: ${error.message}`);
-                res.status(500).json({ error: error.message });
-            }
-        },
-    ],
+    getAllRestaurants: async (page, perPage, borough) => {
+        try {
+            // Construct a query based on the optional borough filter
+            const query = borough ? { 'borough': borough } : {};
+            // Retrieve a paginated list of restaurants based on the query
+            const result = await Restaurant.find(query)
+                .sort({ 'restaurant_id': 1 })
+                .skip((page - 1) * perPage)
+                .limit(perPage);
+            return result;
+        } catch (error) {
+            // Log and throw an error if getting all restaurants fails
+            console.error(`Error getting all restaurants by page, perPage, and borough: ${error.message}`);
+            throw error;
+        }
+    },
 
     // Function to get a restaurant by its unique ID
     getRestaurantById: async (id) => {

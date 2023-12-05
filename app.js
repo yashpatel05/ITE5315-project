@@ -9,6 +9,7 @@
  ******************************************************************************/
 
 const express = require('express');
+const { query, validationResult } = require('express-validator');
 const cors = require('cors');
 const db = require('./db');
 
@@ -49,15 +50,29 @@ app.post('/api/restaurants', async (req, res) => {
 });
 
 // GET route to retrieve a paginated list of restaurants with optional borough filter
-app.get('/api/restaurants', async (req, res) => {
-  try {
-    const { page, perPage, borough } = req.query;
-    const result = await db.getAllRestaurants(Number(page), Number(perPage), borough);
-    res.json(result); // Return the list of restaurants as JSON
-  } catch (error) {
-    res.status(500).json({ error: error.message }); // Return an error message with status code 500 (Internal Server Error)
-  }
-});
+app.get('/api/restaurants', [
+  // Validate query parameters using express-validator
+  query('page').isInt().toInt(),
+  query('perPage').isInt().toInt(),
+  query('borough').optional().isString(),
+
+  async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // Return a 400 response if validation fails
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { page, perPage, borough } = req.query;
+      const result = await db.getAllRestaurants(Number(page), Number(perPage), borough);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+]);
 
 // GET route to retrieve a specific restaurant by ID
 app.get('/api/restaurants/:id', async (req, res) => {
