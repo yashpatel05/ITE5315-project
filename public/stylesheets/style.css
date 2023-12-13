@@ -1,0 +1,102 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+header {
+    height: auto;
+    width: 100%;
+    background-color: #d4f57b;
+    color: #333;
+    text-align: center;
+    /* padding: 10px; */
+    border-bottom: 3px solid #ff9999;
+}
+
+.content {
+    flex-grow: 1;
+    text-align: center;
+    width: 100%;
+    background-color: #d9f2d9;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    height: calc(85vh - 140px);
+}
+
+/* Style for the entire table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #333;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Style for table headers */
+th {
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid #333;
+}
+
+/* Style for table data cells */
+td {
+    text-align: center;
+    padding: 2px;
+    border: 1px solid #333;
+    color: black;
+}
+
+/* Style for alternating rows */
+.inside tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style for hover effect on rows */
+tbody tr:hover {
+    background-color: #ccc;
+}
+
+.inside tbody tr:hover {
+    background-color: yellow;
+}
+
+.name-tags {
+    display: flex;
+    /* Use flexbox for layout */
+    justify-content: center;
+}
+
+.student-info {
+    margin-right: 20px;
+    /* Add margin to create space between items */
+}
+
+.space {
+    width: 20px;
+    /* Adjust the width to control the space between the sets of information */
+}
+
+
+footer {
+    background-color: #d4f57b;
+    color: #333;
+    text-align: center;
+    width: 100%;
+}
+
+.highlight {
+    background-color: #ff0;
+    /* Yellow background for highlight */
+    font-weight: bold;
+    /* Optional: makes the text bold */
+}

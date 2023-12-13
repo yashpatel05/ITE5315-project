@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script>
+    // Get the success and error parameters from the URL
+    const successParam = new URLSearchParams(window.location.search).get('success');
+    const errorParam = new URLSearchParams(window.location.search).get('error');
+
+    // Display an alert for success
+    if (successParam) {
+      alert('Success: ' + decodeURIComponent(successParam));
+    }
+
+    // Display an alert for error
+    if (errorParam) {
+      alert('Error: ' + decodeURIComponent(errorParam));
+    }
+  </script>
+</head>
+
+<body>
+  <header>
+    <div class="name-tags">
+      <div class="student-info">
+        <p>Aditya Joshi</p>
+        <p>Student ID: N01545536</p>
+      </div>
+
+      <!-- Add some space between the two sets of information -->
+      <div class="space"></div>
+
+      <div class="student-info">
+        <p>Yash Patel</p>
+        <p>Student ID: N01537676</p>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto"> <!-- Use "mr-auto" to push items to the left -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/get-restaurants-form">Restaurant By Page</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/api/add-restaurant">Add New Restaurant</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/searchByID">Find Restaurant By ID</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/api/search">Search Restaurant By Name</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a id="logoutButton" class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <div class="content">
+
+    {{{body}}}
+
+  </div>
+  <footer>
+    <p>Email: <br>aditya.joshi@humber.ca <br> yash.patel@humber.ca</p>
+  </footer>
+</body>
+
+</html>

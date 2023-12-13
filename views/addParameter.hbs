@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Get Restaurants</title>
+</head>
+
+<body>
+    <h1>Get Restaurants</h1>
+    <form action="/api/restaurants" method="GET">
+        <label for="page">Page:</label>
+        <input type="number" id="page" name="page" required><br><br>
+
+        <label for="perPage">Per Page:</label>
+        <input type="number" id="perPage" name="perPage" required><br><br>
+
+        <label for="borough">Borough:</label>
+        <input type="text" id="borough" name="borough"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

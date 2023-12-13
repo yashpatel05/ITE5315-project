@@ -4,10 +4,19 @@
  * No part of this assignment has been copied manually or electronically from any other source 
  * (including web sites) or distributed to other students. 
  * 
- * Group member Name: Yash Patel     Student IDs: N01537676    Date: 04/12/23
+ * Group member Name: Yash Patel     Student IDs: N01537676    Date: 12/12/23
  *                    Aditya Joshi                N01545536
  ******************************************************************************/
 
-module.exports = {
-    url: "mongodb+srv://pyash7224:yash1998@clusterfirstproject.zorofv7.mongodb.net/sample_restaurants"
-};
+// load mongoose since we need it to define a model
+var mongoose = require('mongoose');
+
+var Schema = mongoose.Schema;
+
+const jwtuserSchema = new Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+});
+
+const Users = mongoose.model('Users', jwtuserSchema);
+module.exports = Users;
