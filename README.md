@@ -47,10 +47,6 @@ This project focuses on working with sample restaurant data in MongoDB Atlas and
 - Pushed the code to GitHub repository.
 - Deployed the app to Cyclic.
 
-## Deployed Application
-
-The application has been deployed to Cyclic. You can access it [here](https://drab-puce-cuttlefish-veil.cyclic.app/).
-
 ## Additional Content and Screenshots
 
 For additional content and screenshots, please refer to the Word document available in the repository [ITE5315-project](https://github.com/yashpatel05/ITE5315-project/blob/master/ITE5315_Project_Yash_Patel.docx).
