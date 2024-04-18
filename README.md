@@ -1,19 +1,61 @@
-# ITE5315 - Project
+# ITE5315 - Project - Restaurant Management System using Node.js, Express and MongoDB
 
-## Description
+## Project Overview
 
+This project focuses on working with sample restaurant data in MongoDB Atlas and implementing various functionalities using Node.js, Express, and MongoDB.
 
-## Instructions
+### Step 1: Loading Data
 
-### Question 1:
+- Loaded the "Sample Restaurant Data" into MongoDB Atlas.
 
+### Step 2: Setting Up Repository and Models
 
-### Question 2:
+- Set up a new Git repository.
+- Created database.js and restaurant.js models.
+- Initialized the module before starting the server.
 
+### Step 3: Implementing REST API Endpoints
 
-### Question 3:
+- Implemented various REST API endpoints for managing restaurant data:
+  - POST /api/restaurants: Adds a new restaurant document to the collection.
+  - GET /api/restaurants: Returns restaurant objects based on page, perPage, and optional borough filtering. Implemented query param validation for type and presence.
+  - GET /api/restaurants/:id: Returns a specific restaurant object based on the _id.
+  - PUT /api/restaurants/:id: Updates a specific restaurant based on specified values.
+  - DELETE /api/restaurants/:id: Deletes a specific restaurant based on _id.
+- Added UI/Form for:
+  - Getting restaurant by page, perPage, and borough.
+  - Adding restaurant data.
+  - Getting restaurant by ID.
 
+### Step 4: Security Measures
 
-## Authors
+- Implemented security measures:
+  - Used .env file to hide the database connection string.
+  - Encrypted passwords using bcrypt for user authentication.
+  - Authorized access to special routes using JWT token.
 
-[Yash Patel] [Aditya Joshi]
+### Step 5: Additional Functionality
+
+- Added search functionality by restaurant name using partial search and sorted the results by restaurant name.
+
+### Step 6: GraphQL Integration
+
+- Integrated GraphQL for /api/restaurants route to filter results by page, perPage, and borough.
+  
+### Step 7: Deployment
+
+- Pushed the code to GitHub repository.
+- Deployed the app to Cyclic.
+
+## Deployed Application
+
+The application has been deployed to Cyclic. You can access it [here](https://drab-puce-cuttlefish-veil.cyclic.app/).
+
+## Additional Content and Screenshots
+
+For additional content and screenshots, please refer to the Word document available in the repository [ITE5315-project](https://github.com/yashpatel05/ITE5315-project/blob/master/ITE5315_Project_Yash_Patel.docx).
+
+## Author
+
+**Yash Ashokkumar Patel**  
+**Student ID:** N01537676
