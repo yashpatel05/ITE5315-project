@@ -53,5 +53,4 @@ For additional content and screenshots, please refer to the Word document availa
 
 ## Author
 
-**Yash Patel**  
-**N01537676**
+**Yash Patel**
