@@ -1,4 +1,4 @@
-# ITE5315 - Project - Restaurant Management System using Node.js, Express and MongoDB
+# Restaurant Management System using Node.js, Express and MongoDB
 
 ## Project Overview
 
@@ -53,5 +53,5 @@ For additional content and screenshots, please refer to the Word document availa
 
 ## Author
 
-**Yash Ashokkumar Patel**  
+**Yash Patel**  
 **Student ID:** N01537676
